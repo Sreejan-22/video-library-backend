@@ -9,7 +9,7 @@ const performances = [
   },
   {
     category: "performances",
-    url: "https://www.youtube.com/embed/Lf7CiTJXZbQ",
+    url: "https://www.youtube.com/embed/ZyZXCs2XGBM",
     title: "Best Ever Swing Deliveries! ",
     description:
       "From Caddick to Curran, there's no stopping these big swing deliveries!",
@@ -17,7 +17,7 @@ const performances = [
   },
   {
     category: "performances",
-    url: "https://www.youtube.com/embed/Lf7CiTJXZbQ",
+    url: "https://www.youtube.com/embed/ZYvgMaH_I-U",
     title: "BIGGEST Spinning Deliveries of all Time! | England Cricket",
     description:
       "Take a look back at some of the biggest and best spinning deliveries of all time!",
