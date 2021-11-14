@@ -1,11 +1,7 @@
 const Video = require("../models/video.model");
-const videos = require("../data/videos");
-
-// template to copy
-// const getAllVideos = async (req, res) => {
-//   try {
-//   } catch (err) {}
-// }
+const highlights = require("../data/highlights");
+const tutorials = require("../data/tutorials");
+const performances = require("../data/performances");
 
 const getAllVideos = async (req, res) => {
   try {
@@ -36,6 +32,7 @@ const getVideosOfCategory = async (req, res) => {
 
 const insertData = async (req, res) => {
   try {
+    const videos = [...highlights, ...performances, ...tutorials];
     const insertedData = await Video.insertMany(videos);
     res.status(201).json({ success: true, message: "Videos stored in DB" });
   } catch (err) {
@@ -65,4 +62,6 @@ const deleteAll = async (req, res) => {
 module.exports = {
   getAllVideos,
   getVideosOfCategory,
+  insertData,
+  deleteAll,
 };

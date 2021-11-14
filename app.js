@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const authRoutes = require("./routes/auth.route");
+const videoRoutes = require("./routes/video.route");
 
 const app = express();
 
@@ -41,6 +42,7 @@ mongoose
 
 // routes
 app.use(authRoutes);
+app.use(videoRoutes);
 
 // 404
 app.use("/", (req, res) => {
