@@ -9,26 +9,34 @@ const getPlaylists = async (req, res) => {
       .populate({ path: "videos", model: Video });
     res.status(200).json({ success: true, playlists });
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        success: false,
-        message: "Failed to fetch playlists",
-        error: err,
-      });
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch playlists",
+      error: err,
+    });
   }
 };
 
 const createPlaylist = async (req, res) => {
   try {
     const playlist = await Playlist.create(req.body);
-    res.status(200).json({ success: true, message: "Playlist created" });
+    res
+      .status(200)
+      .json({ success: true, message: "Playlist created", playlist });
   } catch (err) {
-    res.status(400).json({
-      success: false,
-      message: "Failed to create playlist",
-      error: err,
-    });
+    if (err.code === 11000) {
+      res.status(400).json({
+        success: false,
+        message: "A playlist with this name already exists",
+        error: err,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Failed to create playlist",
+        error: err,
+      });
+    }
   }
 };
 
@@ -60,13 +68,11 @@ const removeFromPlaylist = async (req, res) => {
     temp.splice(index, 1);
     playlist.videos = temp;
     await playlist.save();
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Video removed from playlist",
-        updatedPlaylist: playlist,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Video removed from playlist",
+      updatedPlaylist: playlist,
+    });
   } catch (err) {
     res.status(400).json({
       success: false,

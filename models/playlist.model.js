@@ -3,6 +3,11 @@ const Schema = mongoose.Schema;
 
 const playlistSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     videos: {
       type: [Schema.Types.ObjectId],
       required: true,
