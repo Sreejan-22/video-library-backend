@@ -1,9 +1,12 @@
 const Saved = require("../models/saved.model");
+const Video = require("../models/video.model");
 
 const getSavedVideos = async (req, res) => {
   try {
     const { username } = req.params;
-    const videos = await Saved.find({ username });
+    const videos = await Saved.find({ username })
+      .sort({ createdAt: -1 })
+      .populate({ path: "videoId", model: Video });
     res.status(200).json({ success: true, videos });
   } catch (err) {
     res.status(400).json({
