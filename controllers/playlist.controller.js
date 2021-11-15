@@ -43,13 +43,25 @@ const createPlaylist = async (req, res) => {
 const addToPlaylist = async (req, res) => {
   try {
     const { id } = req.params;
-    const { video } = req.body;
+    const { videoId } = req.body;
     const playlist = await Playlist.findById(id);
     const temp = [...playlist.videos];
-    temp.push(video);
+    if (temp.includes(videoId)) {
+      res.status(400).json({
+        success: false,
+        message: "Video already exists in playlist",
+        error: err,
+      });
+      return;
+    }
+    temp.push(videoId);
     playlist.videos = temp;
     await playlist.save();
-    res.status(200).json({ success: true, message: "Video added to playlist" });
+    res.status(200).json({
+      success: true,
+      message: "Video added to playlist",
+      updatedPlaylist: playlist,
+    });
   } catch (err) {
     res.status(400).json({
       success: false,
