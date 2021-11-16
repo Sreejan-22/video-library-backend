@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const videoSchema = new Schema(
   {
-    // 3 categories - highlights, tutorial, performances
+    // 3 categories - highlights, tutorials, performances
     category: {
       type: String,
       required: true,
