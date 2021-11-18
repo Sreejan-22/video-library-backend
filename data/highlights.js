@@ -64,11 +64,11 @@ const highlights = [
   },
   {
     category: "highlights",
-    url: "https://www.youtube.com/embed/UT2pMi3VhA8",
+    url: "https://www.youtube.com/embed/k3Zl1tkPa1I",
     title: "Ind VS Aus 2001 Kolkata Test Match",
     description:
-      "The Second Test in the Australian cricket team's tour of India in early 2001 was a Test match played over five days at Eden Gardens in Kolkata from 11–15 March 2001. India won the match by 171 runs after being forced to follow-on, only the third time this has happened since Test cricket began in 1877.",
-    channel: "Youtube Baba",
+      "One of the greatest test match ever witnessed in the history. India wins the test match even after they were forced to follow-on by mighty Australia.",
+    channel: "Cricket Classics",
   },
 ];
 

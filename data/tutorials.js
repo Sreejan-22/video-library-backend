@@ -1,8 +1,8 @@
 const tutorials = [
   {
     category: "tutorials",
-    url: "https://www.youtube.com/embed/VwII4y5vpyU",
-    title: "How to Play Cricket",
+    url: "https://www.youtube.com/embed/M5MD5i6VpYQ",
+    title: "Cricket rules for beginners",
     description:
       "This quick video will give you some tips on how to play the game of cricket. Watch to learn all the tricky terminology for this internationally renowned team sport!",
     channel: "wikiHow",
@@ -17,11 +17,11 @@ const tutorials = [
   },
   {
     category: "tutorials",
-    url: "https://www.youtube.com/embed/Zm9VKD0gH1U",
-    title: "HOW to DRIVE | Batting Tutorials | Cricket",
+    url: "https://www.youtube.com/embed/Fpjp2o2arVs",
+    title: "How to play Straight Drive",
     description:
-      "This video covers the basics of the front foot drive as well as the key principles needed to play the shot effectively.",
-    channel: "CoachCricXI - Online Cricket Coaching",
+      "This video covers the basics of the straight drive as well as the key principles needed to play the shot effectively.",
+    channel: "Sikana English",
   },
   {
     category: "tutorials",
@@ -41,10 +41,10 @@ const tutorials = [
   },
   {
     category: "tutorials",
-    url: "https://www.youtube.com/embed/8ZAx-gsyZck",
-    title: "How to reverse swing a cricket ball",
-    description: "This video explains how to reverse swing a cricket ball.",
-    channel: "cricket tec",
+    url: "https://www.youtube.com/embed/nLItM-fu8Cs",
+    title: "How to bowl Googly",
+    description: "This video shows how to bowl a googly.",
+    channel: "Cricket Bio",
   },
   {
     category: "tutorials",
