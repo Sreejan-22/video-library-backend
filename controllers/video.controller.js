@@ -2,6 +2,7 @@ const Video = require("../models/video.model");
 const highlights = require("../data/highlights");
 const tutorials = require("../data/tutorials");
 const performances = require("../data/performances");
+const mongoose = require("mongoose");
 
 const getAllVideos = async (req, res) => {
   try {
@@ -39,12 +40,19 @@ const search = async (req, res) => {
     const resultsByDescription = await Video.find({
       description: { $regex: query, $options: "i" },
     });
+
     // merge 2 arrays and remove any duplicates if any
-    let ids = new Set(resultsByTitle.map((item) => item._id));
-    let results = [
-      ...resultsByTitle,
-      ...resultsByDescription.filter((item) => !ids.has(item._id)),
-    ];
+    // also convert mongodbid to string otherwise comparisons would go wrong
+    let results = [...resultsByTitle];
+    let ids = resultsByTitle.map((item) =>
+      mongoose.Types.ObjectId.toString(item._id)
+    );
+    resultsByDescription.forEach((item) => {
+      const id = mongoose.Types.ObjectId.toString(item._id);
+      if (!ids.includes(id)) {
+        results.push(item);
+      }
+    });
 
     res.status(200).json({ success: true, results });
   } catch (err) {
