@@ -1,4 +1,5 @@
 const Video = require("../models/video.model");
+const Playlist = require("../models/playlist.model");
 const highlights = require("../data/highlights");
 const tutorials = require("../data/tutorials");
 const performances = require("../data/performances");
