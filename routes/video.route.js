@@ -11,7 +11,7 @@ const {
 const router = Router();
 
 router.get("/videos", getAllVideos);
-router.get("/uservideos/:username", getAllVideosOfUser);
+router.get("/alluservideos/:username", getAllVideosOfUser);
 router.get("/videos/:category", getVideosOfCategory);
 router.get("/search", search);
 router.post("/videos", insertData);
