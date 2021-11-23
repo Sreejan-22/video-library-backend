@@ -5,10 +5,43 @@ const tutorials = require("../data/tutorials");
 const performances = require("../data/performances");
 const mongoose = require("mongoose");
 
+// fetch all videos when user is not logged in
 const getAllVideos = async (req, res) => {
   try {
     const videos = await Video.find();
     res.status(200).json({ success: true, videos });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch videos",
+      error: err,
+    });
+  }
+};
+
+// fetch all videos when user is logged in
+const getAllVideosOfUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const videos = await Video.find();
+    const playlists = await Playlist.find({ username });
+
+    // check for each individual video which playlists contain the video
+    const isAdded = [];
+    videos.forEach((video) => {
+      let temp = [];
+      playlists.forEach((playlist) => {
+        let flag = playlist.videos.find(
+          (item) => String(item._id) === String(video._id)
+        )
+          ? true
+          : false;
+        temp.push(flag);
+      });
+      isAdded.push(temp);
+    });
+
+    res.status(200).json({ success: true, videos, playlists, isAdded });
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -96,6 +129,7 @@ const deleteAll = async (req, res) => {
 
 module.exports = {
   getAllVideos,
+  getAllVideosOfUser,
   getVideosOfCategory,
   search,
   insertData,
