@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const getAllVideos = async (req, res) => {
   try {
     const videos = await Video.find();
-    res.status(200).json({ success: true, videos });
+    res.status(200).json({ success: true, videos, playlists: [], isAdded: [] });
   } catch (err) {
     res.status(400).json({
       success: false,

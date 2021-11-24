@@ -1,5 +1,7 @@
 require("dotenv").config();
 const User = require("../models/user.model");
+const UserProfile = require("../models/userprofile.model");
+const Video = require("../models/video.model");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../utils/createToken");
 const { handleSignupError } = require("../utils/handleSignupErrors");
@@ -17,7 +19,25 @@ const signup = async (req, res) => {
     // after a new account is created, the user is logged into the website
     // so a token, to be sent to the frontend, has to be generated
     const token = createToken(newUser._id);
-    res.status(201).json({ success: true, user: newUser, token });
+
+    // create new user profile
+    const videos = await Video.find();
+    const playlists = []; // new profile so no playlist created yet
+    const allVideos = videos.map((item) => {
+      return {
+        videoId: item._id,
+        playlists: [], // no video is part of any playlist yet
+      };
+    });
+    const newUserProfile = await UserProfile.create({
+      username,
+      allVideos,
+      playlists,
+    });
+
+    res
+      .status(201)
+      .json({ success: true, user: newUser, token, newUserProfile });
   } catch (err) {
     const errors = handleSignupError(err);
 
