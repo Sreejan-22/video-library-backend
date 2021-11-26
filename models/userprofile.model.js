@@ -7,7 +7,6 @@ const playlistSchema = new Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     videos: [videoSchema],
     username: {

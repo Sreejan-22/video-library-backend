@@ -18,6 +18,66 @@ const getFullProfile = async (req, res) => {
   }
 };
 
+const getVideosForSingleVideoPage = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { category, currVideoId } = req.query;
+    const userProfile = await UserProfile.findOne({ username }).populate({
+      path: "allVideos.videoId",
+    });
+
+    const videos = userProfile.allVideos.filter(
+      (item) =>
+        item.videoId.category === category &&
+        String(item.videoId._id) !== String(currVideoId)
+    );
+
+    res.status(200).json({ success: true, userProfile, videos });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch videos",
+      error: err,
+    });
+  }
+};
+
+const searchUserVideos = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const resultsByTitle = await UserProfile.find({
+      "allVideos.videoId.title": { $regex: query, $options: "i" },
+    });
+    const resultsByDescription = await UserProfile.find({
+      "allVideos.videoId.description": { $regex: query, $options: "i" },
+    });
+
+    console.log(resultsByTitle);
+    console.log(resultsByDescription);
+
+    // merge 2 arrays and remove any duplicates if any
+    // also convert mongodbid to string otherwise comparisons would go wrong
+    let results = [...resultsByTitle];
+    let ids = resultsByTitle.map((item) =>
+      mongoose.Types.ObjectId.toString(item._id)
+    );
+    resultsByDescription.forEach((item) => {
+      const id = mongoose.Types.ObjectId.toString(item._id);
+      if (!ids.includes(id)) {
+        results.push(item);
+      }
+    });
+
+    res.status(200).json({ success: true, results });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch search results",
+      error: err,
+    });
+  }
+};
+
 const createNewProfile = async (req, res) => {
   try {
     const { username } = req.params;
@@ -188,6 +248,8 @@ const deletePlaylist = async (req, res) => {
 
 module.exports = {
   getFullProfile,
+  getVideosForSingleVideoPage,
+  searchUserVideos,
   createNewProfile,
   createNewPlaylist,
   addVideoToPlaylist,

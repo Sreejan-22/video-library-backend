@@ -54,7 +54,10 @@ const getAllVideosOfUser = async (req, res) => {
 const getVideosOfCategory = async (req, res) => {
   try {
     const { category } = req.params;
-    const videos = await Video.find({ category });
+    const { videoId } = req.body;
+    let videos = await Video.find({ category });
+    videos = videos.filter((item) => String(item._id) !== String(videoId));
+
     res.status(200).json({ success: true, videos });
   } catch (err) {
     res.status(400).json({

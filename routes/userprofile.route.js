@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const {
   getFullProfile,
+  getVideosForSingleVideoPage,
+  searchUserVideos,
   createNewProfile,
   createNewPlaylist,
   addVideoToPlaylist,
@@ -12,6 +14,12 @@ const { checkAuthentication } = require("../middlewares/auth.middleware");
 const router = Router();
 
 router.get("/profile/:username", checkAuthentication, getFullProfile);
+router.get(
+  "/singlevideo/:username/",
+  checkAuthentication,
+  getVideosForSingleVideoPage
+);
+router.get("/searchuservideos", checkAuthentication, searchUserVideos);
 router.post("/profile/:username", checkAuthentication, createNewProfile);
 router.post("/newplaylist/:username", checkAuthentication, createNewPlaylist);
 router.put(
