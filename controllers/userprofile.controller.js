@@ -6,7 +6,7 @@ const getFullProfile = async (req, res) => {
   try {
     const { username } = req.params;
     const userProfile = await UserProfile.findOne({ username }).populate({
-      path: "allVideos.videoId",
+      path: "allVideos.videoId playlists.videos",
     });
     res.status(200).json({ success: true, userProfile });
   } catch (err) {

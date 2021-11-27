@@ -104,7 +104,9 @@ const search = async (req, res) => {
 const insertData = async (req, res) => {
   try {
     const videos = [...highlights, ...performances, ...tutorials];
-    const insertedData = await Video.insertMany(videos);
+    const insertedData = await Video.insertMany(videos, {
+      forceServerObjectId: true,
+    });
     res.status(201).json({ success: true, message: "Videos stored in DB" });
   } catch (err) {
     console.log(err);
