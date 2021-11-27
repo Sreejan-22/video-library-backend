@@ -57,8 +57,8 @@ const createPlaylist = async (req, res) => {
 
 const addToPlaylist = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { video } = req.body;
+    const { username } = req.params;
+    const { id, video } = req.body;
 
     const playlist = await Playlist.findById(id);
     const temp = [...playlist.videos];
@@ -98,10 +98,13 @@ const addToPlaylist = async (req, res) => {
 
 const removeFromPlaylist = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { index } = req.body;
-    const playlist = await Playlist.findById(id);
+    const { username } = req.params;
+    const { playlistId, videoId } = req.body;
+    const playlist = await Playlist.findById(playlistId);
     const temp = [...playlist.videos];
+    const index = temp.findIndex(
+      (item) => String(item._id) === String(videoId)
+    );
     temp.splice(index, 1);
     playlist.videos = temp;
     await playlist.save();

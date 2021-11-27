@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const getAllVideos = async (req, res) => {
   try {
     const videos = await Video.find();
-    res.status(200).json({ success: true, videos, playlists: [], isAdded: [] });
+    res.status(200).json({ success: true, videos, playlists: [] });
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -26,22 +26,7 @@ const getAllVideosOfUser = async (req, res) => {
     const videos = await Video.find();
     const playlists = await Playlist.find({ username });
 
-    // check for each individual video which playlists contain the video
-    const isAdded = [];
-    videos.forEach((video) => {
-      let temp = [];
-      playlists.forEach((playlist) => {
-        let flag = playlist.videos.find(
-          (item) => String(item._id) === String(video._id)
-        )
-          ? true
-          : false;
-        temp.push(flag);
-      });
-      isAdded.push(temp);
-    });
-
-    res.status(200).json({ success: true, videos, playlists, isAdded });
+    res.status(200).json({ success: true, videos, playlists });
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -59,6 +44,25 @@ const getVideosOfCategory = async (req, res) => {
     videos = videos.filter((item) => String(item._id) !== String(videoId));
 
     res.status(200).json({ success: true, videos });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch videos",
+      error: err,
+    });
+  }
+};
+
+const getVideosOfCategoryOfUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { category, videoId } = req.query;
+    let videos = await Video.find({ category });
+    videos = videos.filter((item) => String(item._id) !== String(videoId));
+
+    const playlists = await Playlist.find({ username });
+
+    res.status(200).json({ success: true, videos, playlists });
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -136,6 +140,7 @@ module.exports = {
   getAllVideos,
   getAllVideosOfUser,
   getVideosOfCategory,
+  getVideosOfCategoryOfUser,
   search,
   insertData,
   deleteAll,
