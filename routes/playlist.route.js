@@ -5,6 +5,8 @@ const {
   addToPlaylist,
   removeFromPlaylist,
   deletePlaylist,
+  saveVideo,
+  unsaveVideo,
 } = require("../controllers/playlist.controller");
 const { checkAuthentication } = require("../middlewares/auth.middleware");
 
@@ -19,5 +21,7 @@ router.put(
   removeFromPlaylist
 );
 router.delete("/playlists/:id", checkAuthentication, deletePlaylist);
+router.put("/save/:username", checkAuthentication, saveVideo);
+router.put("/unsave/:username", checkAuthentication, unsaveVideo);
 
 module.exports = router;

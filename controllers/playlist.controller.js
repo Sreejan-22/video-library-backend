@@ -23,6 +23,14 @@ const createPlaylist = async (req, res) => {
 
     const temp = await Playlist.findOne({ name, username });
 
+    if (name === "Saved") {
+      res.status(400).json({
+        success: false,
+        message: "A separate playlist for saved videos already exists",
+      });
+      return;
+    }
+
     if (temp) {
       res.status(400).json({
         success: false,
@@ -130,11 +138,83 @@ const deletePlaylist = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedPlaylist = await Playlist.findByIdAndDelete(id);
-    res.status(200).json({ success: true, message: "Playlist deleted" });
+    const playlists = await Playlist.find({ username }).sort({ createdAt: -1 });
+    res
+      .status(200)
+      .json({ success: true, message: "Playlist deleted", playlists });
   } catch (err) {
     res.status(400).json({
       success: false,
       message: "Failed to delete playlist",
+      error: err,
+    });
+  }
+};
+
+const saveVideo = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { video } = req.body;
+    let result;
+    const saved = await Playlist.findOne({ username, name: "Saved" });
+
+    if (saved) {
+      const temp = [...saved.videos];
+      temp.push(video);
+      saved.videos = temp;
+      await saved.save();
+      result = saved;
+    } else {
+      const savedPlaylist = await Playlist.create({
+        name: "Saved",
+        videos: [video],
+        username,
+      });
+      result = savedPlaylist;
+    }
+
+    const playlists = await Playlist.find({ username }).sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, playlists, savedPlaylist: result });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      message: "Failed to save video",
+      error: err,
+    });
+  }
+};
+
+const unsaveVideo = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { videoId } = req.body;
+    const saved = await Playlist.findOne({ username, name: "Saved" });
+
+    if (saved) {
+      const temp = [...saved.videos];
+      const index = temp.findIndex(
+        (item) => String(item._id) === String(videoId)
+      );
+      temp.splice(index, 1);
+      saved.videos = temp;
+      await saved.save();
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "This video does is not saved",
+        error: err,
+      });
+    }
+
+    const playlists = await Playlist.find({ username }).sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, playlists, savedPlaylist: saved });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to unsave video",
       error: err,
     });
   }
@@ -146,4 +226,6 @@ module.exports = {
   addToPlaylist,
   removeFromPlaylist,
   deletePlaylist,
+  saveVideo,
+  unsaveVideo,
 };
