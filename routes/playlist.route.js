@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const {
   getPlaylists,
+  getSinglePlaylist,
   createPlaylist,
   addToPlaylist,
   removeFromPlaylist,
@@ -13,6 +14,7 @@ const { checkAuthentication } = require("../middlewares/auth.middleware");
 const router = Router();
 
 router.get("/playlists/:username", checkAuthentication, getPlaylists);
+router.get("/singleplaylist/:id", checkAuthentication, getSinglePlaylist);
 router.post("/playlists/:username", checkAuthentication, createPlaylist);
 router.put("/playlists/add/:username", checkAuthentication, addToPlaylist);
 router.put(
@@ -20,7 +22,7 @@ router.put(
   checkAuthentication,
   removeFromPlaylist
 );
-router.delete("/playlists/:id", checkAuthentication, deletePlaylist);
+router.delete("/playlists/:username/:id", checkAuthentication, deletePlaylist);
 router.put("/save/:username", checkAuthentication, saveVideo);
 router.put("/unsave/:username", checkAuthentication, unsaveVideo);
 

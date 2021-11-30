@@ -15,6 +15,22 @@ const getPlaylists = async (req, res) => {
   }
 };
 
+const getSinglePlaylist = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const playlist = await Playlist.findById(id);
+    const playlists = await Playlist.find({ username }).sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, playlists, currPlaylist: playlist });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch playlists",
+      error: err,
+    });
+  }
+};
+
 // create a playlist with 1 video
 const createPlaylist = async (req, res) => {
   try {
@@ -136,7 +152,7 @@ const removeFromPlaylist = async (req, res) => {
 
 const deletePlaylist = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { username, id } = req.params;
     const deletedPlaylist = await Playlist.findByIdAndDelete(id);
     const playlists = await Playlist.find({ username }).sort({ createdAt: -1 });
     res
@@ -222,6 +238,7 @@ const unsaveVideo = async (req, res) => {
 
 module.exports = {
   getPlaylists,
+  getSinglePlaylist,
   createPlaylist,
   addToPlaylist,
   removeFromPlaylist,
