@@ -17,7 +17,7 @@ const getPlaylists = async (req, res) => {
 
 const getSinglePlaylist = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { username, id } = req.params;
     const playlist = await Playlist.findById(id);
     const playlists = await Playlist.find({ username }).sort({ createdAt: -1 });
 
@@ -70,7 +70,6 @@ const createPlaylist = async (req, res) => {
       playlists,
     });
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       success: false,
       message: "Failed to create playlist",
@@ -111,7 +110,6 @@ const addToPlaylist = async (req, res) => {
       playlists,
     });
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       success: false,
       message: "Failed to add video to playlist",
@@ -193,7 +191,6 @@ const saveVideo = async (req, res) => {
 
     res.status(200).json({ success: true, playlists, savedPlaylist: result });
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       success: false,
       message: "Failed to save video",

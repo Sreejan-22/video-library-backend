@@ -113,7 +113,6 @@ const insertData = async (req, res) => {
     });
     res.status(201).json({ success: true, message: "Videos stored in DB" });
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       success: false,
       message: "Failed to store videos",
@@ -127,7 +126,6 @@ const deleteAll = async (req, res) => {
     const temp = await Video.deleteMany({});
     res.status(200).json({ success: true, message: "All data deleted" });
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       success: false,
       message: "Failed to delete data",

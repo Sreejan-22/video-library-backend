@@ -14,7 +14,11 @@ const { checkAuthentication } = require("../middlewares/auth.middleware");
 const router = Router();
 
 router.get("/playlists/:username", checkAuthentication, getPlaylists);
-router.get("/singleplaylist/:id", checkAuthentication, getSinglePlaylist);
+router.get(
+  "/singleplaylist/:username/:id",
+  checkAuthentication,
+  getSinglePlaylist
+);
 router.post("/playlists/:username", checkAuthentication, createPlaylist);
 router.put("/playlists/add/:username", checkAuthentication, addToPlaylist);
 router.put(
