@@ -43,7 +43,7 @@ const getVideosOfCategory = async (req, res) => {
     let videos = await Video.find({ category });
     videos = videos.filter((item) => String(item._id) !== String(videoId));
 
-    res.status(200).json({ success: true, videos });
+    res.status(200).json({ success: true, videos, playlists: [] });
   } catch (err) {
     res.status(400).json({
       success: false,
@@ -105,6 +105,42 @@ const search = async (req, res) => {
   }
 };
 
+const searchVideosOfUsers = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { query } = req.query;
+    const resultsByTitle = await Video.find({
+      title: { $regex: query, $options: "i" },
+    });
+    const resultsByDescription = await Video.find({
+      description: { $regex: query, $options: "i" },
+    });
+
+    // merge 2 arrays and remove any duplicates if any
+    // also convert mongodbid to string otherwise comparisons would go wrong
+    let results = [...resultsByTitle];
+    let ids = resultsByTitle.map((item) =>
+      mongoose.Types.ObjectId.toString(item._id)
+    );
+    resultsByDescription.forEach((item) => {
+      const id = mongoose.Types.ObjectId.toString(item._id);
+      if (!ids.includes(id)) {
+        results.push(item);
+      }
+    });
+
+    const playlists = await Playlist.find({ username });
+
+    res.status(200).json({ success: true, videos: results, playlists });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch search results",
+      error: err,
+    });
+  }
+};
+
 const insertData = async (req, res) => {
   try {
     const videos = [...highlights, ...performances, ...tutorials];
@@ -140,6 +176,7 @@ module.exports = {
   getVideosOfCategory,
   getVideosOfCategoryOfUser,
   search,
+  searchVideosOfUsers,
   insertData,
   deleteAll,
 };

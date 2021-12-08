@@ -233,6 +233,26 @@ const unsaveVideo = async (req, res) => {
   }
 };
 
+const getSavedPlaylist = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const savedPlaylist = await Playlist.findOne({ username, name: "Saved" });
+    const playlists = await Playlist.find({ username }).sort({ createdAt: -1 });
+
+    if (savedPlaylist) {
+      res.status(200).json({ success: true, savedPlaylist, playlists });
+    } else {
+      res.status(200).json({ success: true, savedPlaylist: [], playlists });
+    }
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "Failed to fetch saved videos",
+      error: err,
+    });
+  }
+};
+
 module.exports = {
   getPlaylists,
   getSinglePlaylist,
@@ -242,4 +262,5 @@ module.exports = {
   deletePlaylist,
   saveVideo,
   unsaveVideo,
+  getSavedPlaylist,
 };
