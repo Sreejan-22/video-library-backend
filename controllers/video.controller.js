@@ -95,7 +95,7 @@ const search = async (req, res) => {
       }
     });
 
-    res.status(200).json({ success: true, results });
+    res.status(200).json({ success: true, videos: results, playlists: [] });
   } catch (err) {
     res.status(400).json({
       success: false,
