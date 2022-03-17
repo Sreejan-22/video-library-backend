@@ -61,7 +61,6 @@ const getVideosOfCategoryOfUser = async (req, res) => {
     videos = videos.filter((item) => String(item._id) !== String(videoId));
 
     const playlists = await Playlist.find({ username });
-    console.log("videos length:", videos.length);
 
     res.status(200).json({ success: true, videos, playlists });
   } catch (err) {
