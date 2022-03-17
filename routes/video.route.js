@@ -17,7 +17,7 @@ router.get("/videos", getAllVideos);
 router.get("/alluservideos/:username", checkAuthentication, getAllVideosOfUser);
 router.get("/videos/:category", getVideosOfCategory);
 router.get(
-  "/uservideos/:username",
+  "/uservideos/:username/:category",
   checkAuthentication,
   getVideosOfCategoryOfUser
 );

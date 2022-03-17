@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const videoSchema = require("../models/video.model").schema;
+const videoSchema = require("./video.model").schema;
 
 const playlistSchema = new Schema(
   {

@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 // fetch all videos when user is not logged in
 const getAllVideos = async (req, res) => {
   try {
-    const videos = await Video.find();
+    const videos = await Video.find({}).lean();
     res.status(200).json({ success: true, videos, playlists: [] });
   } catch (err) {
     res.status(400).json({
@@ -23,7 +23,7 @@ const getAllVideos = async (req, res) => {
 const getAllVideosOfUser = async (req, res) => {
   try {
     const { username } = req.params;
-    const videos = await Video.find();
+    const videos = await Video.find({}).lean();
     const playlists = await Playlist.find({ username });
 
     res.status(200).json({ success: true, videos, playlists });
@@ -40,7 +40,7 @@ const getVideosOfCategory = async (req, res) => {
   try {
     const { category } = req.params;
     const { videoId } = req.query;
-    let videos = await Video.find({ category });
+    let videos = await Video.find({ category }).lean();
     videos = videos.filter((item) => String(item._id) !== String(videoId));
 
     res.status(200).json({ success: true, videos, playlists: [] });
@@ -55,12 +55,13 @@ const getVideosOfCategory = async (req, res) => {
 
 const getVideosOfCategoryOfUser = async (req, res) => {
   try {
-    const { username } = req.params;
-    const { category, videoId } = req.query;
-    let videos = await Video.find({ category });
+    const { username, category } = req.params;
+    const { videoId } = req.query;
+    let videos = await Video.find({ category }).lean();
     videos = videos.filter((item) => String(item._id) !== String(videoId));
 
     const playlists = await Playlist.find({ username });
+    console.log("videos length:", videos.length);
 
     res.status(200).json({ success: true, videos, playlists });
   } catch (err) {
